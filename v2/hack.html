@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="https://cdn.glitch.com/bf81f2d6-8438-4fda-b1ed-5c95421f0aec%2Ffavicon.ico" />
+
+    <title>Starting... | openRätsel</title>
+    
+    <!-- import the webpage's stylesheet -->
+    <link rel="stylesheet" href="/style.css" />
+    
+    <script src="/v2/script.js"></script>
+
+  </head>
+  <body>
+    <!-- the wrapper and content divs set margins and positioning -->
+    <div class="wrapper">
+      <div class="content" role="main">
+        <!-- this is the start of content for our page -->
+        <h1 id="titlemsg" class="title">Fill:</h1>
+        <script>
+          function submit() {
+            window.location.href = "/v2/result.html?game="+game.value+"&points="+points.value+"&name="+name.value+"&avalible="+avalible.value+"#"+Date.now()
+          }
+        </script>
+          Game ID or Link: <input id="game">
+          Punkte: <input id="points">
+          max. Punkte: <input id="avalible">
+          Name: <input id="name">
+          <input type="button" onclick="submit()" value="HACK">
+      </div>
+    </div>
+  </body>
+</html>

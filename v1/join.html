@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="https://glitch.com/favicon.ico" />
+
+    <title>Anmelden | openRätsel</title>
+    
+    <!-- import the webpage's stylesheet -->
+    <link rel="stylesheet" href="/style.css" />
+
+    <!-- import the webpage's javascript file -->
+    <script src="/script.js"></script>
+  </head>
+  <body>
+    <!-- the wrapper and content divs set margins and positioning -->
+    <script>sessionCheck()</script>
+    <div class="wrapper">
+      <div class="content" role="main">
+        <!-- this is the start of content for our page -->
+        <h1 id="titlemsg" class="title">Anmelden</h1><br>
+        <form id="f" action="/v1/game.html" method="GET">
+          <input id="gt" placeholder="Game ID or Game Link" name="game"><br>
+          <input placeholder="Dein Name" name="name"><br>
+          <input id="time" style="display:none;" name="session"><br>
+          <input name="submit" type="submit" value="Start"><br>
+        </form>
+        <script>
+          try{
+            if(window.location.href.indexOf("?")!=-1){
+              if(getQuerys()["game"]){
+                gt.value = getQuerys()["game"]
+              } else {
+                //nothing
+              }
+            } else {
+              //nothing
+            }
+            setInterval('time.value=Date.now()', 3000)
+            setInterval('if(gt.value.startsWith("/") || gt.value.startsWith("https://") || gt.value.startsWith("http://")){f.action="/v1/owngame.html"}else{f.action="/v1/opengame.html"}', 500)
+          } catch(e){window.location.href = '/v1/crashed.html#:'+Date.now()+':#e!'+e.stack}
+        </script>
+      </div>
+    </div>
+    <script>setTimeout(function(){alert("Es gibt eine neuere Version von openRätsel!\nGehe auf openraetsel.glitch.me/v2 um die neue Version zu nutzen!\n(Die alte Version kann weiterhin genutzt werden.)\nNeu:\n - Verbesserte Performance\n - Mehr Möglichkeiten für Quiz-Creator\n\n Online Games are not implementet yet!")}, 100)</script>
+  </body>
+</html>

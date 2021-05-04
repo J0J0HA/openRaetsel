@@ -1,0 +1,46 @@
+{
+  "name":"Pronomen Latein",
+  "version":1,
+  "todo":10,
+  "points":20,
+  "tables":[
+    {
+      "main":"ille",
+      "todo":5,
+      "titles-1":["Nom. Sg.", "Gen. Sg.", "Dat. Sg.", "Akk. Sg.", "Abl. Sg.", "Nom. Pl.", "Gen. Pl.", "Dat. Pl.", "Akk. Pl.", "Abl. Pl."],
+      "titles-2":["m.", "f.", "n."],
+      "table":[
+        ["ille", "illa", "illud"],
+        ["illius", "illius", "illius"],
+        ["illi", "illi", "illi"],
+        ["illum", "illam", "illud"],
+        ["illo", "illa", "illo"],
+        ["illi", "illae", "illa"],
+        ["illorum", "illarum", "illorum"],
+        ["illis", "illis", "illis"],
+        ["illos", "illas", "illa"],
+        ["illis", "illis", "illis"]
+      ],
+      "points":10
+    },
+    {
+      "main":"hic",
+      "todo":5,
+      "titles-1":["Nom. Sg.", "Gen. Sg.", "Dat. Sg.", "Akk. Sg.", "Abl. Sg.", "Nom. Pl.", "Gen. Pl.", "Dat. Pl.", "Akk. Pl.", "Abl. Pl."],
+      "titles-2":["m.", "f.", "n."],
+      "table":[
+        ["hic", "haec", "hoc"],
+        ["huius", "huius", "huius"],
+        ["huic", "huic", "huic"],
+        ["hunc", "hanc", "hoc"],
+        ["hoc", "hac", "hoc"],
+        ["hi", "hae", "haec"],
+        ["horum", "harum", "horum"],
+        ["his", "his", "his"],
+        ["hos", "has", "haec"],
+        ["his", "his", "his"]
+      ],
+      "points":10
+    }
+  ]
+}
