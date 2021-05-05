@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="https://cdn.glitch.com/bf81f2d6-8438-4fda-b1ed-5c95421f0aec%2Ffavicon.ico" />
+
+    <title>Anmelden | openRätsel</title>
+    <link rel="stylesheet" href="/style.css" />
+    <script src="/v3/script.js"></script>
+  </head>
+  <body>
+    <div class="wrapper">
+      <div class="content" role="main">
+        <!-- this is the start of content for our page -->
+        <h1 id="titlemsg" class="title">Anmelden</h1><br>
+        <form id="f" action="/v3/show-results.html" method="GET">
+          <input id="gt" placeholder="Game ID" name="game"><br>
+          <input type="password" id="pass" placeholder="Passwort" name="pass"><br>
+          <input id="time" style="display:none;" name="session">
+          <input name="submit" type="submit" value="Start"><br>
+        </form>
+        <script>
+          try{
+            if(window.location.href.indexOf("?")!=-1){
+              if(getQuerys()["game"]){
+                gt.value = getQuerys()["game"]
+              } else {
+                //nothing
+              }
+            } else {
+              //nothing
+            }
+            setInterval('time.value=Date.now()', 3000)
+          } catch(e){window.location.href = '/v3/crashed.html#:'+Date.now()+':#e!'+e.stack}
+          </script>
+      </div>
+    </div>
+  </body>
+</html>

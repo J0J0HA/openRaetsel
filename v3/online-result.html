@@ -6,12 +6,24 @@
     <link rel="icon" href="https://cdn.glitch.com/bf81f2d6-8438-4fda-b1ed-5c95421f0aec%2Ffavicon.ico" />
 
     <title>Auswertung | openRätsel</title>
-    
-    <!-- import the webpage's stylesheet -->
     <link rel="stylesheet" href="/style.css" />
-
-    <!-- import the webpage's javascript file -->
     <script src="/v3/script.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.4.3/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.4.3/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.4.3/firebase-analytics.js"></script>
+    <script>
+    var firebaseConfig = {
+      apiKey: "AIzaSyDBJz_TZ68OMTs7vV9cJYg4bYOwjSLJrag",
+      authDomain: "openraetsel.firebaseapp.com",
+      databaseURL: "https://openraetsel-default-rtdb.europe-west1.firebasedatabase.app/",
+      projectId: "openraetsel",
+      storageBucket: "openraetsel.appspot.com",
+      messagingSenderId: "663157303897",
+      appId: "1:663157303897:web:d7a612ef9062091ce59f48",
+      measurementId: "G-SYVJG1XY3V"
+    };
+    firebase.initializeApp(firebaseConfig);
+    </script>
   </head>
   <body>
     <!-- the wrapper and content divs set margins and positioning -->
@@ -41,6 +53,8 @@
         setTimeout('if(p>=70){titlemsg.innerHTML="Gut";note.innerHTML="2"}', 1000)
         setTimeout('if(p>=85){titlemsg.innerHTML="Sehr Gut";note.innerHTML="1"}', 1250)
         setTimeout('if(p>=100){titlemsg.innerHTML="Perfekt";note.innerHTML="1+"}', 1500)
+        
+        setTimeout('firebase.database().ref("/game/"+getQuerys()["game"]+"/results/"+getQuerys()["name"]).set({"points":getQuerys()["points"]+"/"+getQuerys()["avalible"], "note":titlemsg.innerHTML+" "+note.innerHTML, "name":getQuerys()["name"]})', 1600)
       } catch(e){window.location.href = '/v3/crashed.html#:'+Date.now()+':#e!'+e.stack}
     </script>
   </body>

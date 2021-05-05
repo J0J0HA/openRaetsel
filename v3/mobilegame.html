@@ -6,25 +6,24 @@
     <link rel="icon" href="https://cdn.glitch.com/bf81f2d6-8438-4fda-b1ed-5c95421f0aec%2Ffavicon.ico" />
 
     <title>Spiel | openRätsel</title>
-    
-    <!-- import the webpage's stylesheet -->
+    <script src="https://www.gstatic.com/firebasejs/8.4.3/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.4.3/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.4.3/firebase-analytics.js"></script>
+    <script>
+    var firebaseConfig = {
+      apiKey: "AIzaSyDBJz_TZ68OMTs7vV9cJYg4bYOwjSLJrag",
+      authDomain: "openraetsel.firebaseapp.com",
+      databaseURL: "https://openraetsel-default-rtdb.europe-west1.firebasedatabase.app/",
+      projectId: "openraetsel",
+      storageBucket: "openraetsel.appspot.com",
+      messagingSenderId: "663157303897",
+      appId: "1:663157303897:web:d7a612ef9062091ce59f48",
+      measurementId: "G-SYVJG1XY3V"
+    };
+    firebase.initializeApp(firebaseConfig);
+    </script>
     <link rel="stylesheet" href="/style.css" />
     <script src="/jquery.js"></script>
-    <script>
-      function enterFullscreen(element) {
-        if(element.requestFullscreen) {
-          element.requestFullscreen();
-        } else if(element.msRequestFullscreen) {
-          element.msRequestFullscreen();
-        } else if(element.webkitRequestFullscreen) {
-          element.webkitRequestFullscreen();
-        } else if(element.webkitRequestFullScreen) {
-          element.webkitRequestFullScreen();
-        } else {
-          alert("f")
-        }
-      }
-    </script>
   </head>
   <body>
     <!-- the wrapper and content divs set margins and positioning -->
@@ -112,7 +111,11 @@
           alevel += 1
           if(level >= data.questions[qid].todo){levelup()}
           if(lu == true){levelup()}
-          if(valevel-1 >= data.todo){window.location.href = "/v3/result.html?points="+points+"&game="+getQuerys()["game"]+"&avalible="+apoints+"#"+Date.now()}
+          if(getQuerys()["online"]=="0"){
+            if(valevel-1 >= data.todo){window.location.href = "/v3/result.html?points="+points+"&game="+decodeURIComponent(getQuerys()["game"])+"&gn="+data.name+"&avalible="+apoints+"&name="+decodeURIComponent(getQuerys()["name"])+"#"+Date.now()}
+          } else {
+            if(valevel-1 >= data.todo){window.location.href = "/v3/online-result.html?points="+points+"&game="+decodeURIComponent(getQuerys()["game"])+"&gn="+data.name+"&avalible="+apoints+"&name="+decodeURIComponent(getQuerys()["name"])+"#"+Date.now()}
+          }
           next()
           pov.innerHTML=points+" Punkt(e)"
           exv.innerHTML="Aufgabe "+(valevel)+"/"+data.todo
@@ -146,7 +149,11 @@
           level += 1
           alevel += 1
           levelup()
-          if(valevel-1 >= data.todo){window.location.href = "/v3/result.html?points="+points+"&game="+getQuerys()["game"]+"&avalible="+apoints+"#"+Date.now()}
+          if(getQuerys()["online"]=="0"){
+            if(valevel-1 >= data.todo){window.location.href = "/v3/result.html?points="+points+"&game="+decodeURIComponent(getQuerys()["game"])+"&gn="+data.name+"&avalible="+apoints+"&name="+decodeURIComponent(getQuerys()["name"])+"#"+Date.now()}
+          } else {
+            if(valevel-1 >= data.todo){window.location.href = "/v3/online-result.html?points="+points+"&game="+decodeURIComponent(getQuerys()["game"])+"&gn="+data.name+"&avalible="+apoints+"&name="+decodeURIComponent(getQuerys()["name"])+"#"+Date.now()}
+          }
           next()
           pov.innerHTML=points+" Punkt(e)"
           exv.innerHTML="Aufgabe "+(valevel)+"/"+data.todo
@@ -208,17 +215,30 @@
         if (this.readyState == 4) {
           if(this.status == 200) {
             setTimeout("var data = " + xhttp.responseText, 0)
-            setTimeout('if(data.version!=2){window.location.href="/v3/info.html#:"+Date.now()+":#e!Die Datei ist nicht für diese Version gedacht. Gehe auf https://openraetsel.glitch.me/v"+data.version+"/?game="+getQuerys()["game"]+" um sie zu spielen."};', 50)
+            setTimeout('if(data.version!=3){window.location.href="/v3/info.html#:"+Date.now()+":#e!Die Datei ist nicht für diese Version gedacht. Gehe auf https://openraetsel.glitch.me/v"+data.version+"/?game="+getQuerys()["game"]+" um sie zu spielen."};', 50)
             setTimeout(function(){try{levelup();next()}catch(e){window.location.href = "/v3/crashed.html#:"+Date.now()+":#e!"+e.stack}}, 1000)
           } else {
             window.location.href = "/v3/nogame.html#"+Date.now()
+            alert("")
           }
         }
       };
-      xhttp.open("GET", getQuerys()["game"].replace("%2F", "/")+".json", true);
-      xhttp.send();
+      if(getQuerys()["online"]=="0"){
+        xhttp.open("GET", decodeURIComponent(getQuerys()["game"]), true)
+      } else {
+        firebase.database().ref("/game/"+getQuerys()["game"]+"/link").get().then((snapshot) => {
+        if (snapshot.exists()) {
+          xhttp.open("GET", snapshot.val(), true);
+          xhttp.send();
+        } else {
+          window.location.href = "/v3/nogame.html#"+Date.now()
+        }
+        }).catch((error) => {
+          console.error(error);
+        });
+      }
       function next() {
-        if(document.body.offsetWidth>document.body.offsetHeight){window.location.href = window.location.href.replace("/v3/mobilegame.html", "/v3/desktopgame.html")}
+        if(document.body.offsetWidth<document.body.offsetHeight){window.location.href = window.location.href.replace("/v3/desktopgame.html", "/v3/mobilegame.html")}
         if (data.questions[qid].type=="table") {
         nxr()
         document.getElementById("q").innerHTML = data.questions[qid]["titles-1"][r1]+" "+data.questions[qid]["titles-2"][r2]+" von "+data.questions[qid].main;

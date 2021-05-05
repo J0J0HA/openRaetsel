@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="https://cdn.glitch.com/bf81f2d6-8438-4fda-b1ed-5c95421f0aec%2Ffavicon.ico" />
+
+    <title>Ergebnisse | openRätsel</title>
+    <link rel="stylesheet" href="/style.css" />
+    <script src="/v3/script.js"></script>
+    <script src="/jquery.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.4.3/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.4.3/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.4.3/firebase-analytics.js"></script>
+    <script>
+    var firebaseConfig = {
+      apiKey: "AIzaSyDBJz_TZ68OMTs7vV9cJYg4bYOwjSLJrag",
+      authDomain: "openraetsel.firebaseapp.com",
+      databaseURL: "https://openraetsel-default-rtdb.europe-west1.firebasedatabase.app/",
+      projectId: "openraetsel",
+      storageBucket: "openraetsel.appspot.com",
+      messagingSenderId: "663157303897",
+      appId: "1:663157303897:web:d7a612ef9062091ce59f48",
+      measurementId: "G-SYVJG1XY3V"
+    };
+    firebase.initializeApp(firebaseConfig);
+    </script>
+  </head>
+  <body>
+    <!-- the wrapper and content divs set margins and positioning -->
+    <script>try{
+        if((parseInt(getQuerys()["session"])<=Date.now()-10000) || (getQuerys()["session"]==undefined)){
+          if((parseInt(window.location.href.split("#")[1])<=Date.now()-10000) || (window.location.href.split("#")[1]==undefined)){
+            console.log("Your session is over. (You internet ist too slow or you used a old link!)")
+            window.location.href="/v3/uncorrect.html#"+Date.now()
+          }
+        }
+      }catch(e){
+        console.log("We cannot check your session. (You used a wrong link or our system has failed.)")
+        window.location.href="/v3/unchecked.html#"+Date.now()
+      }
+      if(getQuerys()["submit"]){
+        window.location.href = window.location.href.replace("&submit=Start", "")
+        window.location.href = window.location.href.replace("&session=", "#")
+      }
+      setInterval('window.location.href=window.location.href.split("#")[0]+"#"+Date.now()', 3000)</script>
+    <div class="wrapper">
+      <div class="content" role="main">
+        <!-- this is the start of content for our page -->
+        <h1 id="titlemsg" class="title">Übersicht</h1><br>
+        <table id="table" style="font-size:20px;overflow:scroll;"></table>
+        <script>
+          try{
+            table.innerHTML="<tr><th>Name</th><th>Punkte</th><th>Note</th></tr>"
+            firebase.database().ref("/game/"+getQuerys()["game"]+"/pass").get().then((snapshot) => {
+              if (snapshot.exists()) {
+                if(snapshot.val() != getQuerys()["pass"]){
+                  window.location.href = '/v3/info.html#:'+Date.now()+':#e!Passwort falsch!'
+                }
+              } else {
+                window.location.href = "/v3/nogame.html#"+Date.now()
+              }
+              })
+            setTimeout(function(){
+              firebase.database().ref("/game/"+getQuerys()["game"]+"/results").get().then((snapshot) => {
+                if (snapshot.exists()) {
+                  console.log(snapshot.val())
+                  $.each(snapshot.val(), function(){
+                    console.log(this)
+                    table.innerHTML+="<tr><th>"+this["name"]+"</th><th>"+this["points"]+"</th><th>"+this["note"]+"</th></tr>"
+                  })
+                } else {
+                  window.location.href = "/v3/nogame.html#"+Date.now()
+                }
+                }).catch((error) => {
+                  console.error(error);
+                }
+              );
+            }, 1000)
+          } catch(e){window.location.href = '/v3/crashed.html#:'+Date.now()+':#e!'+e.stack}
+          </script>
+      </div>
+    </div>
+  </body>
+</html>
