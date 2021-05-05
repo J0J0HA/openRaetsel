@@ -221,6 +221,7 @@
             setTimeout(function(){try{levelup();next()}catch(e){window.location.href = "/v3/crashed.html#:"+Date.now()+":#e!"+e.stack}}, 1000)
           } else {
             window.location.href = "/v3/nogame.html#"+Date.now()
+            console.log(this.status, this.readyState)
           }
         }
       };
@@ -231,6 +232,7 @@
         firebase.database().ref("/game/"+getQuerys()["game"]+"/link").get().then((snapshot) => {
         if (snapshot.exists()) {
           xhttp.open("GET", snapshot.val(), true);
+          xhttp.send();
         } else {
           window.location.href = "/v3/nogame.html#"+Date.now()
         }
