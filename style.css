@@ -134,3 +134,21 @@ p {
   height: 50%;
   width: 60%;
 }
+
+th {
+  text-align:left;
+  align-items: left;
+  justify-content: left;
+}
+
+tr {
+  text-align:left;
+  align-items: left;
+  justify-content: left;
+}
+
+table {
+  text-align:left;
+  align-items: left;
+  justify-content: left;
+}

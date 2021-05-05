@@ -48,10 +48,10 @@
       <div class="content" role="main">
         <!-- this is the start of content for our page -->
         <h1 id="titlemsg" class="title">Übersicht</h1><br>
-        <table id="table" style="font-size:20px;overflow:scroll;"></table>
+        <span style="overflow-y:scroll;overflow-x:hidden;height:200px;"><table id="table" style="font-size:20px;"></table></span>
         <script>
           try{
-            table.innerHTML="<tr><th>Name</th><th>Punkte</th><th>Note</th></tr>"
+            table.innerHTML="<tr><th>Name</th><th>Punkte</th><th>Note</th><th>Datum</th></tr>"
             firebase.database().ref("/game/"+getQuerys()["game"]+"/pass").get().then((snapshot) => {
               if (snapshot.exists()) {
                 if(snapshot.val() != getQuerys()["pass"]){
@@ -67,7 +67,7 @@
                   console.log(snapshot.val())
                   $.each(snapshot.val(), function(){
                     console.log(this)
-                    table.innerHTML+="<tr><th>"+this["name"]+"</th><th>"+this["points"]+"</th><th>"+this["note"]+"</th></tr>"
+                    table.innerHTML+="<tr><th>"+this["name"]+"</th><th>"+this["points"]+"</th><th>"+this["note"]+"</th><th>"+this["date"]+"</th></tr>"
                   })
                 } else {
                   window.location.href = "/v3/nogame.html#"+Date.now()
