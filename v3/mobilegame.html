@@ -29,7 +29,7 @@
   <body>
     <!-- the wrapper and content divs set margins and positioning -->
     <script>
-      if(document.body.offsetWidth>document.body.offsetHeight){window.location.href = window.location.href.replace("/v2/mobilegame.html", "/v2/desktopgame.html")}
+      if(document.body.offsetWidth>document.body.offsetHeight){window.location.href = window.location.href.replace("/v3/mobilegame.html", "/v3/desktopgame.html")}
       var data = {}
       var done = []
       var qid = 0
@@ -57,12 +57,12 @@
         if((parseInt(getQuerys()["session"])<=Date.now()-10000) || (getQuerys()["session"]==undefined)){
           if((parseInt(window.location.href.split("#")[1])<=Date.now()-10000) || (window.location.href.split("#")[1]==undefined)){
             console.log("Your session is over. (You internet ist too slow or you used a old link!)")
-            window.location.href="/v2/uncorrect.html#"+Date.now()
+            window.location.href="/v3/uncorrect.html#"+Date.now()
           }
         }
       }catch(e){
         console.log("We cannot check your session. (You used a wrong link or our system has failed.)")
-        window.location.href="/v2/unchecked.html#"+Date.now()
+        window.location.href="/v3/unchecked.html#"+Date.now()
       }
       if(getQuerys()["submit"]){
         window.location.href = window.location.href.replace("&submit=Start", "")
@@ -112,7 +112,7 @@
           alevel += 1
           if(level >= data.questions[qid].todo){levelup()}
           if(lu == true){levelup()}
-          if(valevel-1 >= data.todo){window.location.href = "/v2/result.html?points="+points+"&game="+getQuerys()["game"]+"&avalible="+apoints+"#"+Date.now()}
+          if(valevel-1 >= data.todo){window.location.href = "/v3/result.html?points="+points+"&game="+getQuerys()["game"]+"&avalible="+apoints+"#"+Date.now()}
           next()
           pov.innerHTML=points+" Punkt(e)"
           exv.innerHTML="Aufgabe "+(valevel)+"/"+data.todo
@@ -146,7 +146,7 @@
           level += 1
           alevel += 1
           levelup()
-          if(valevel-1 >= data.todo){window.location.href = "/v2/result.html?points="+points+"&game="+getQuerys()["game"]+"&avalible="+apoints+"#"+Date.now()}
+          if(valevel-1 >= data.todo){window.location.href = "/v3/result.html?points="+points+"&game="+getQuerys()["game"]+"&avalible="+apoints+"#"+Date.now()}
           next()
           pov.innerHTML=points+" Punkt(e)"
           exv.innerHTML="Aufgabe "+(valevel)+"/"+data.todo
@@ -190,18 +190,16 @@
     </script>
     <div class="wrapper">
       <div class="content" role="main">
-        <div class="questpanel">
           <p id="questcontent">
-            <span id="pov" style="font-size:50px;position:absolute;top:10px;right:20px;">0 Punkt(e)</span>
-            <span id="exv" style="font-size:50px;position:absolute;top:10px;left:20px;">Aufgabe 0/0</span>
-            <span id="q">Laden...</span><br>
-            <span id="correcting"><br></span><br>
+            <span id="pov" style="font-size:20px;position:absolute;left:10px;top:0px;">0 Punkt(e)</span>
+            <span id="exv" style="font-size:20px;position:absolute;left:10px;top:30px;">Aufgabe 0/0</span>
+            <span id="q" style="font-size:30px;">Laden...</span><span id="brspan"><br></span>
+            <span id="correcting"><br></span>
             <form id="questcontent" onsubmit="return false">
               <input id="answer"><br>
-              <span id="buttons"></span><input onclick="try{check()}catch(e){window.location.href = '/v2/crashed.html#:'+Date.now()+':#e!'+e.stack}" type="submit" value="Senden" id="submit">
+              <span id="buttons"></span><input onclick="try{check()}catch(e){window.location.href = '/v3/crashed.html#:'+Date.now()+':#e!'+e.stack}" type="submit" value="Senden" id="submit">
           </form>
           </p>
-        </div>
       </div>
     </div>
     <script>
@@ -210,21 +208,17 @@
         if (this.readyState == 4) {
           if(this.status == 200) {
             setTimeout("var data = " + xhttp.responseText, 0)
-            setTimeout('if(data.version!=2){window.location.href="/v2/info.html#:"+Date.now()+":#e!Die Datei ist nicht für diese Version gedacht. Gehe auf https://openraetsel.glitch.me/v"+data.version+"/?game="+getQuerys()["game"]+" um sie zu spielen."};', 50)
-            setTimeout(function(){try{levelup();next()}catch(e){window.location.href = "/v2/crashed.html#:"+Date.now()+":#e!"+e.stack}}, 1000)
+            setTimeout('if(data.version!=2){window.location.href="/v3/info.html#:"+Date.now()+":#e!Die Datei ist nicht für diese Version gedacht. Gehe auf https://openraetsel.glitch.me/v"+data.version+"/?game="+getQuerys()["game"]+" um sie zu spielen."};', 50)
+            setTimeout(function(){try{levelup();next()}catch(e){window.location.href = "/v3/crashed.html#:"+Date.now()+":#e!"+e.stack}}, 1000)
           } else {
-            window.location.href = "/v2/nogame.html#"+Date.now()
+            window.location.href = "/v3/nogame.html#"+Date.now()
           }
         }
       };
-      if(getQuerys()["game"].replace("%2F", "/").substring(0,1)=="/"){
-        xhttp.open("GET", getQuerys()["game"].replace("%2F", "/")+".json", true);
-      } else {
-        xhttp.open("GET", decodeURIComponent(getQuerys()["game"]), true);
-      }
+      xhttp.open("GET", getQuerys()["game"].replace("%2F", "/")+".json", true);
       xhttp.send();
       function next() {
-        if(document.body.offsetWidth<document.body.offsetHeight){window.location.href = window.location.href.replace("/v2/desktopgame.html", "/v2/mobilegame.html")}
+        if(document.body.offsetWidth>document.body.offsetHeight){window.location.href = window.location.href.replace("/v3/mobilegame.html", "/v3/desktopgame.html")}
         if (data.questions[qid].type=="table") {
         nxr()
         document.getElementById("q").innerHTML = data.questions[qid]["titles-1"][r1]+" "+data.questions[qid]["titles-2"][r2]+" von "+data.questions[qid].main;

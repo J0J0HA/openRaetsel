@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="https://cdn.glitch.com/bf81f2d6-8438-4fda-b1ed-5c95421f0aec%2Ffavicon.ico" />
+
+    <title>Auswertung | openRätsel</title>
+    
+    <!-- import the webpage's stylesheet -->
+    <link rel="stylesheet" href="/style.css" />
+
+    <!-- import the webpage's javascript file -->
+    <script src="/v3/script.js"></script>
+  </head>
+  <body>
+    <!-- the wrapper and content divs set margins and positioning -->
+    <script>sessionCheck()</script>
+    <div class="wrapper">
+      <div class="content" role="main">
+        <!-- this is the start of content for our page -->
+        <h1 id="note" class="title">...</h1>
+        <h1 id="titlemsg" class="title">...</h1><br>
+        <p id="more">
+          ...
+        </p>
+        <p>
+          <a href="/v3">Neues Quiz starten</a>
+        </p>
+      </div>
+    </div>
+    <script>
+      try {
+        more.innerHTML = "Du hast in '"+decodeURI(getQuerys()["game"])+"' "+getQuerys()["points"]+" von "+getQuerys()["avalible"]+" Punten erreicht!"
+        p = (getQuerys()["points"] / getQuerys()["avalible"])*100
+        console.log(p)
+        if(p>=0){titlemsg.innerHTML="Ungenügend";note.innerHTML="6"}
+        setTimeout('if(p>=2){titlemsg.innerHTML="Mangelhaft";note.innerHTML="5"}', 250)
+        setTimeout('if(p>=15){titlemsg.innerHTML="Ausreichend";note.innerHTML="4"}', 500)
+        setTimeout('if(p>=30){titlemsg.innerHTML="Befriedigend";note.innerHTML="3"}', 750)
+        setTimeout('if(p>=70){titlemsg.innerHTML="Gut";note.innerHTML="2"}', 1000)
+        setTimeout('if(p>=85){titlemsg.innerHTML="Sehr Gut";note.innerHTML="1"}', 1250)
+        setTimeout('if(p>=100){titlemsg.innerHTML="Perfekt";note.innerHTML="1+"}', 1500)
+      } catch(e){window.location.href = '/v3/crashed.html#:'+Date.now()+':#e!'+e.stack}
+    </script>
+  </body>
+</html>

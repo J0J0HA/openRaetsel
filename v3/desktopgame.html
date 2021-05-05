@@ -6,7 +6,30 @@
     <link rel="icon" href="https://cdn.glitch.com/bf81f2d6-8438-4fda-b1ed-5c95421f0aec%2Ffavicon.ico" />
 
     <title>Spiel | openRätsel</title>
-    
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/8.4.3/firebase-app.js"></script>
+
+    <!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+    <script src="https://www.gstatic.com/firebasejs/8.4.3/firebase-analytics.js"></script>
+
+    <script>
+    // Your web app's Firebase configuration
+    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+    var firebaseConfig = {
+      apiKey: "AIzaSyDBJz_TZ68OMTs7vV9cJYg4bYOwjSLJrag",
+      authDomain: "openraetsel.firebaseapp.com",
+      databaseURL: "https://openraetsel-default-rtdb.europe-west1.firebasedatabase.app",
+      projectId: "openraetsel",
+      storageBucket: "openraetsel.appspot.com",
+      messagingSenderId: "663157303897",
+      appId: "1:663157303897:web:d7a612ef9062091ce59f48",
+      measurementId: "G-SYVJG1XY3V"
+    };
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    //* firebase.analytics();
+</script>
     <!-- import the webpage's stylesheet -->
     <link rel="stylesheet" href="/style.css" />
     <script src="/jquery.js"></script>
@@ -29,7 +52,7 @@
   <body>
     <!-- the wrapper and content divs set margins and positioning -->
     <script>
-      if(document.body.offsetWidth>document.body.offsetHeight){window.location.href = window.location.href.replace("/v2/mobilegame.html", "/v2/desktopgame.html")}
+      if(document.body.offsetWidth>document.body.offsetHeight){window.location.href = window.location.href.replace("/v3/mobilegame.html", "/v3/desktopgame.html")}
       var data = {}
       var done = []
       var qid = 0
@@ -57,12 +80,12 @@
         if((parseInt(getQuerys()["session"])<=Date.now()-10000) || (getQuerys()["session"]==undefined)){
           if((parseInt(window.location.href.split("#")[1])<=Date.now()-10000) || (window.location.href.split("#")[1]==undefined)){
             console.log("Your session is over. (You internet ist too slow or you used a old link!)")
-            window.location.href="/v2/uncorrect.html#"+Date.now()
+            window.location.href="/v3/uncorrect.html#"+Date.now()
           }
         }
       }catch(e){
         console.log("We cannot check your session. (You used a wrong link or our system has failed.)")
-        window.location.href="/v2/unchecked.html#"+Date.now()
+        window.location.href="/v3/unchecked.html#"+Date.now()
       }
       if(getQuerys()["submit"]){
         window.location.href = window.location.href.replace("&submit=Start", "")
@@ -112,7 +135,7 @@
           alevel += 1
           if(level >= data.questions[qid].todo){levelup()}
           if(lu == true){levelup()}
-          if(valevel-1 >= data.todo){window.location.href = "/v2/result.html?points="+points+"&game="+getQuerys()["game"]+"&avalible="+apoints+"#"+Date.now()}
+          if(valevel-1 >= data.todo){window.location.href = "/v3/result.html?points="+points+"&game="+getQuerys()["game"]+"&avalible="+apoints+"#"+Date.now()}
           next()
           pov.innerHTML=points+" Punkt(e)"
           exv.innerHTML="Aufgabe "+(valevel)+"/"+data.todo
@@ -146,7 +169,7 @@
           level += 1
           alevel += 1
           levelup()
-          if(valevel-1 >= data.todo){window.location.href = "/v2/result.html?points="+points+"&game="+getQuerys()["game"]+"&avalible="+apoints+"#"+Date.now()}
+          if(valevel-1 >= data.todo){window.location.href = "/v3/result.html?points="+points+"&game="+getQuerys()["game"]+"&avalible="+apoints+"#"+Date.now()}
           next()
           pov.innerHTML=points+" Punkt(e)"
           exv.innerHTML="Aufgabe "+(valevel)+"/"+data.todo
@@ -198,7 +221,7 @@
             <span id="correcting"><br></span><br>
             <form id="questcontent" onsubmit="return false">
               <input id="answer"><br>
-              <span id="buttons"></span><input onclick="try{check()}catch(e){window.location.href = '/v2/crashed.html#:'+Date.now()+':#e!'+e.stack}" type="submit" value="Senden" id="submit">
+              <span id="buttons"></span><input onclick="try{check()}catch(e){window.location.href = '/v3/crashed.html#:'+Date.now()+':#e!'+e.stack}" type="submit" value="Senden" id="submit">
           </form>
           </p>
         </div>
@@ -210,21 +233,25 @@
         if (this.readyState == 4) {
           if(this.status == 200) {
             setTimeout("var data = " + xhttp.responseText, 0)
-            setTimeout('if(data.version!=2){window.location.href="/v2/info.html#:"+Date.now()+":#e!Die Datei ist nicht für diese Version gedacht. Gehe auf https://openraetsel.glitch.me/v"+data.version+"/?game="+getQuerys()["game"]+" um sie zu spielen."};', 50)
-            setTimeout(function(){try{levelup();next()}catch(e){window.location.href = "/v2/crashed.html#:"+Date.now()+":#e!"+e.stack}}, 1000)
+            setTimeout('if(data.version!=3){window.location.href="/v3/info.html#:"+Date.now()+":#e!Die Datei ist nicht für diese Version gedacht. Gehe auf https://openraetsel.glitch.me/v"+data.version+"/?game="+getQuerys()["game"]+" um sie zu spielen."};', 50)
+            setTimeout(function(){try{levelup();next()}catch(e){window.location.href = "/v3/crashed.html#:"+Date.now()+":#e!"+e.stack}}, 1000)
           } else {
-            window.location.href = "/v2/nogame.html#"+Date.now()
+            window.location.href = "/v3/nogame.html#"+Date.now()
           }
         }
       };
-      if(getQuerys()["game"].replace("%2F", "/").substring(0,1)=="/"){
-        xhttp.open("GET", getQuerys()["game"].replace("%2F", "/")+".json", true);
+      if(getQuerys()["online"]=="0"){
+        if(getQuerys()["game"].replace("%2F", "/").substring(0,1)=="/"){
+          xhttp.open("GET", getQuerys()["game"].replace("%2F", "/")+".json", true);
+        } else {
+          xhttp.open("GET", decodeURIComponent(getQuerys()["game"]), true);
+        }
       } else {
         xhttp.open("GET", decodeURIComponent(getQuerys()["game"]), true);
       }
       xhttp.send();
       function next() {
-        if(document.body.offsetWidth<document.body.offsetHeight){window.location.href = window.location.href.replace("/v2/desktopgame.html", "/v2/mobilegame.html")}
+        if(document.body.offsetWidth<document.body.offsetHeight){window.location.href = window.location.href.replace("/v3/desktopgame.html", "/v3/mobilegame.html")}
         if (data.questions[qid].type=="table") {
         nxr()
         document.getElementById("q").innerHTML = data.questions[qid]["titles-1"][r1]+" "+data.questions[qid]["titles-2"][r2]+" von "+data.questions[qid].main;
