@@ -217,7 +217,7 @@
         if (this.readyState == 4) {
           if(this.status == 200) {
             setTimeout("var data = " + xhttp.responseText, 0)
-            setTimeout('if(data.version!=3){window.location.href="/v3/info.html#:"+Date.now()+":#e!Die Datei ist nicht für diese Version gedacht. Gehe auf https://openraetsel.glitch.me/v"+data.version+"/?game="+getQuerys()["game"]+" um sie zu spielen."};', 50)
+            setTimeout('if(data.version!=2 && data.version!=3){window.location.href="/v3/info.html#:"+Date.now()+":#e!Die Datei ist nicht für diese Version gedacht. Gehe auf https://openraetsel.glitch.me/v"+data.version+"/?game="+getQuerys()["game"]+" um sie zu spielen."};', 50)
             setTimeout(function(){try{levelup();next()}catch(e){window.location.href = "/v3/crashed.html#:"+Date.now()+":#e!"+e.stack}}, 1000)
           } else {
             window.location.href = "/v3/nogame.html#"+Date.now()
@@ -226,11 +226,11 @@
       };
       if(getQuerys()["online"]=="0"){
         xhttp.open("GET", decodeURIComponent(getQuerys()["game"]), true)
+        xhttp.send();
       } else {
         firebase.database().ref("/game/"+getQuerys()["game"]+"/link").get().then((snapshot) => {
         if (snapshot.exists()) {
           xhttp.open("GET", snapshot.val(), true);
-          xhttp.send();
         } else {
           window.location.href = "/v3/nogame.html#"+Date.now()
         }

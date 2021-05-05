@@ -54,7 +54,7 @@
         setTimeout('if(p>=85){titlemsg.innerHTML="Sehr Gut";note.innerHTML="1"}', 1250)
         setTimeout('if(p>=100){titlemsg.innerHTML="Perfekt";note.innerHTML="1+"}', 1500)
         var h = new Date()
-        setTimeout('firebase.database().ref("/game/"+getQuerys()["game"]+"/results/"+getQuerys()["name"]).set({"points":getQuerys()["points"]+"/"+getQuerys()["avalible"], "date":h.getDate() + "." + (h.getMonth() + 1) + "." + h.getFullYear(), "note":titlemsg.innerHTML+" "+note.innerHTML, "name":getQuerys()["name"]})', 1600)
+        setTimeout('firebase.database().ref("/game/"+getQuerys()["game"]+"/results/"+getQuerys()["name"]+Date.now()).set({"points":getQuerys()["points"]+"/"+getQuerys()["avalible"], "date":h.getDate() + "." + (h.getMonth() + 1) + "." + h.getFullYear(), "note":titlemsg.innerHTML+" "+note.innerHTML, "name":getQuerys()["name"]})', 1600)
       } catch(e){window.location.href = '/v3/crashed.html#:'+Date.now()+':#e!'+e.stack}
     </script>
   </body>
