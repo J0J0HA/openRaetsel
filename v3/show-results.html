@@ -51,7 +51,7 @@
         <span style="overflow-y:scroll;overflow-x:hidden;height:200px;"><table id="table" style="font-size:20px;"></table></span>
         <script>
           try{
-            table.innerHTML="<tr><th>Name</th><th>Punkte</th><th>Note</th><th>Datum</th></tr>"
+            table.innerHTML="<b>Laden...</b>"
             firebase.database().ref("/game/"+getQuerys()["game"]+"/pass").get().then((snapshot) => {
               if (snapshot.exists()) {
                 if(snapshot.val() != getQuerys()["pass"]){
@@ -64,13 +64,13 @@
             setTimeout(function(){
               firebase.database().ref("/game/"+getQuerys()["game"]+"/results").get().then((snapshot) => {
                 if (snapshot.exists()) {
-                  console.log(snapshot.val())
+                  table.innerHTML="<tr><th>Name</th><th>Punkte</th><th>Note</th><th>Datum</th></tr>"
                   $.each(snapshot.val(), function(){
                     console.log(this)
                     table.innerHTML+="<tr><th>"+this["name"]+"</th><th>"+this["points"]+"</th><th>"+this["note"]+"</th><th>"+this["date"]+"</th></tr>"
                   })
                 } else {
-                  window.location.href = "/v3/nogame.html#"+Date.now()
+                  firebase.database().ref("/game/"+getQuerys()["game"]).get().then((snapshot) => {if(snapshot.exists()){table.innerHTML="<b>Es liegen keine Ergebnisse vor.</b>"}else{window.location.href = "/v3/nogame.html#"+Date.now()}})
                 }
                 }).catch((error) => {
                   console.error(error);
