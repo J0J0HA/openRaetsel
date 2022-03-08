@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="https://cdn.glitch.com/bf81f2d6-8438-4fda-b1ed-5c95421f0aec%2Ffavicon.ico" />
+
+    <title>Spiel | openRätsel</title>
+    <script src="https://www.gstatic.com/firebasejs/8.4.3/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.4.3/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.4.3/firebase-analytics.js"></script>
+    <script>
+    var firebaseConfig = {
+      apiKey: "AIzaSyDBJz_TZ68OMTs7vV9cJYg4bYOwjSLJrag",
+      authDomain: "openraetsel.firebaseapp.com",
+      databaseURL: "https://openraetsel-default-rtdb.europe-west1.firebasedatabase.app/",
+      projectId: "openraetsel",
+      storageBucket: "openraetsel.appspot.com",
+      messagingSenderId: "663157303897",
+      appId: "1:663157303897:web:d7a612ef9062091ce59f48",
+      measurementId: "G-SYVJG1XY3V"
+    };
+    firebase.initializeApp(firebaseConfig);
+    </script>
+    <link rel="stylesheet" href="/style.css" />
+    <script src="/jquery.js"></script>
+  </head>
+  <body>
+    <!-- the wrapper and content divs set margins and positioning -->
+    <script>
+      if(document.body.offsetWidth>document.body.offsetHeight){window.location.href = window.location.href.replace("/v3/mobilegame.html", "/v3/desktopgame.html")}
+      var data = {}
+      var done = []
+      var qid = 0
+      var r1 = 0
+      var r2 = 0
+      var level = 0
+      var alevel = 0
+      var valevel = 0
+      var points = 0
+      var apoints = 0
+      function getQuerys(){
+        qs = window.location.href.split("?")[1].split("#")[0]
+        try{
+          qe = qs.split("&")
+        }catch(e){
+          qe=[qs]
+        }
+        res = {}
+        for(var e in qe){
+          res[qe[e].split("=")[0]] = qe[e].split("=")[1]
+        }
+        return res
+      }
+      try{
+        if((parseInt(getQuerys()["session"])<=Date.now()-10000) || (getQuerys()["session"]==undefined)){
+          if((parseInt(window.location.href.split("#")[1])<=Date.now()-10000) || (window.location.href.split("#")[1]==undefined)){
+            console.log("Your session is over. (You internet ist too slow or you used a old link!)")
+            window.location.href="/v3/uncorrect.html#"+Date.now()
+          }
+        }
+      }catch(e){
+        console.log("We cannot check your session. (You used a wrong link or our system has failed.)")
+        window.location.href="/v3/unchecked.html#"+Date.now()
+      }
+      if(getQuerys()["submit"]){
+        window.location.href = window.location.href.replace("&submit=Start", "")
+        window.location.href = window.location.href.replace("&session=", "#")
+      }
+      setInterval('window.location.href=window.location.href.split("#")[0]+"#"+Date.now()', 3000)
+      
+      function check(){
+        var timeout = 1000
+        var lu = false
+        if (data.questions[qid].type=="table") {
+        if(answer.value.toLowerCase() == data.questions[qid].table[r1][r2].toLowerCase()){
+          q.innerHTML = "Richtig!"
+          correcting.innerHTML="+"+(data.questions[qid].points/data.questions[qid].todo)
+          points += data.questions[qid].points/data.questions[qid].todo
+          apoints += data.questions[qid].points/data.questions[qid].todo
+        }else{
+          correcting.innerHTML="Der "+q.innerHTML+" ist " + data.questions[qid].table[r1][r2]
+          q.innerHTML = "Falsch!"
+          timeout = 3000
+          apoints += data.questions[qid].points/data.questions[qid].todo
+        }
+        } else if (data.questions[qid].type=="text") {
+        if(answer.value.toLowerCase() == data.questions[qid].correct.toLowerCase()){
+          q.innerHTML = "Richtig!"
+          var lu = true
+          correcting.innerHTML="+"+(data.questions[qid].points)
+          points += data.questions[qid].points
+          apoints += data.questions[qid].points
+        }else{
+          correcting.innerHTML="Es war " + data.questions[qid].correct
+          q.innerHTML = "Falsch!"
+          var lu = true
+          timeout = 3000
+          apoints += data.questions[qid].points
+        }
+        }
+        answer.value = ""
+        answer.disabled = "disabled"
+        submit.disabled = "disabled"
+        setTimeout(function(){
+          answer.disabled = ""
+          submit.disabled = ""
+          correcting.innerHTML="<br>"
+          answer.focus()
+          level += 1
+          alevel += 1
+          if(level >= data.questions[qid].todo){levelup()}
+          if(lu == true){levelup()}
+          if(getQuerys()["online"]=="0"){
+            if(valevel-1 >= data.todo){window.location.href = "/v3/result.html?points="+points+"&game="+decodeURIComponent(getQuerys()["game"])+"&gn="+data.name+"&avalible="+apoints+"&name="+decodeURIComponent(getQuerys()["name"])+"#"+Date.now()}
+          } else {
+            if(valevel-1 >= data.todo){window.location.href = "/v3/online-result.html?points="+points+"&game="+decodeURIComponent(getQuerys()["game"])+"&gn="+data.name+"&avalible="+apoints+"&name="+decodeURIComponent(getQuerys()["name"])+"#"+Date.now()}
+          }
+          next()
+          pov.innerHTML=points+" Punkt(e)"
+          exv.innerHTML="Aufgabe "+(valevel)+"/"+data.todo
+        }, timeout)
+      }
+      
+      function clicked(name){
+        var timeout = 1000
+        if(name.toLowerCase() == data.questions[qid].correct.toLowerCase()){
+          q.innerHTML = "Richtig!"
+          correcting.innerHTML="+"+(data.questions[qid].points)
+          points += data.questions[qid].points
+          apoints += data.questions[qid].points
+        }else{
+          correcting.innerHTML="Es war " + data.questions[qid].correct
+          q.innerHTML = "Falsch!"
+          timeout = 3000
+          apoints += data.questions[qid].points
+        }
+        buttons.innerHTML = ""
+        answer.disabled = "disabled"
+        answer.value = name
+        submit.style["display"] = "block"
+        submit.disabled = "disabled"
+        setTimeout(function(){
+          answer.value = ""
+          answer.disabled = ""
+          submit.disabled = ""
+          correcting.innerHTML="<br>"
+          answer.focus()
+          level += 1
+          alevel += 1
+          levelup()
+          if(getQuerys()["online"]=="0"){
+            if(valevel-1 >= data.todo){window.location.href = "/v3/result.html?points="+points+"&game="+decodeURIComponent(getQuerys()["game"])+"&gn="+data.name+"&avalible="+apoints+"&name="+decodeURIComponent(getQuerys()["name"])+"#"+Date.now()}
+          } else {
+            if(valevel-1 >= data.todo){window.location.href = "/v3/online-result.html?points="+points+"&game="+decodeURIComponent(getQuerys()["game"])+"&gn="+data.name+"&avalible="+apoints+"&name="+decodeURIComponent(getQuerys()["name"])+"#"+Date.now()}
+          }
+          next()
+          pov.innerHTML=points+" Punkt(e)"
+          exv.innerHTML="Aufgabe "+(valevel)+"/"+data.todo
+        }, timeout)
+      }
+      
+      function levelup(){
+        qid = Math.round(Math.random()*data.questions.length-1)
+        if(qid==-1){qid=0}
+        if(done.indexOf(qid)!=-1){levelplus()}
+        if(qid >= data.questions.length){qid=0}
+        level = 0
+        pov.innerHTML=points+" Punkt(e)"
+        exv.innerHTML="Aufgabe "+(valevel)+"/"+data.todo
+        done = done.concat(qid)
+        valevel+=1
+      }
+      
+      function levelplus(){
+        qid+=1
+        if(done.indexOf(qid)!=-1){levelplus()}
+      }
+      
+      function nxr(){
+        r1 = Math.round(Math.random()*data.questions[qid]["titles-1"].length-1)
+        if(r1==-1){r1=0}
+        r2 = Math.round(Math.random()*data.questions[qid]["titles-2"].length-1)
+        if(r2==-1){r2=0}
+        if(done.indexOf(qid+":"+r1+"-"+r2)!=-1){nxrp()}
+        done = done.concat(qid+":"+r1+"-"+r2)
+      }
+      
+      function nxrp(){
+        if(r1>=data.questions[qid]["titles-1"].length-1){
+          r2+=1
+        } else {
+          r1+=1
+        }
+        if(done.indexOf(qid+":"+r1+"-"+r2)!=-1){nxrp()}
+      }
+    </script>
+    <div class="wrapper">
+      <div class="content" role="main">
+          <p id="questcontent">
+            <span id="pov" style="font-size:20px;position:absolute;left:10px;top:0px;">0 Punkt(e)</span>
+            <span id="exv" style="font-size:20px;position:absolute;left:10px;top:30px;">Aufgabe 0/0</span>
+            <span id="q" style="font-size:30px;">Laden...</span><span id="brspan"><br></span>
+            <span id="correcting"><br></span>
+            <form id="questcontent" onsubmit="return false">
+              <input id="answer"><br>
+              <span id="buttons"></span><input onclick="try{check()}catch(e){window.location.href = '/v3/crashed.html#:'+Date.now()+':#e!'+e.stack}" type="submit" value="Senden" id="submit">
+          </form>
+          </p>
+      </div>
+    </div>
+    <script>
+      var xhttp = new XMLHttpRequest();
+      xhttp.onreadystatechange = function() {
+        if (this.readyState == 4) {
+          if(this.status == 200) {
+            setTimeout("var data = " + xhttp.responseText, 0)
+            setTimeout('if(data.version!=2 && data.version!=3){window.location.href="/v3/info.html#:"+Date.now()+":#e!Die Datei ist nicht für diese Version gedacht. Gehe auf https://openraetsel.glitch.me/v"+data.version+"/?game="+getQuerys()["game"]+" um sie zu spielen."};', 50)
+            setTimeout(function(){try{levelup();next()}catch(e){window.location.href = "/v3/crashed.html#:"+Date.now()+":#e!"+e.stack}}, 1000)
+          } else {
+            window.location.href = "/v3/nogame.html#"+Date.now()
+            alert("")
+          }
+        }
+      };
+      if(getQuerys()["online"]=="0"){
+        xhttp.open("GET", decodeURIComponent(getQuerys()["game"]), true)
+      } else {
+        firebase.database().ref("/game/"+getQuerys()["game"]+"/link").get().then((snapshot) => {
+        if (snapshot.exists()) {
+          xhttp.open("GET", snapshot.val(), true);
+          xhttp.send();
+        } else {
+          window.location.href = "/v3/nogame.html#"+Date.now()
+        }
+        }).catch((error) => {
+          console.error(error);
+        });
+      }
+      function next() {
+        if(document.body.offsetWidth<document.body.offsetHeight){window.location.href = window.location.href.replace("/v3/desktopgame.html", "/v3/mobilegame.html")}
+        if (data.questions[qid].type=="table") {
+        nxr()
+        document.getElementById("q").innerHTML = data.questions[qid]["titles-1"][r1]+" "+data.questions[qid]["titles-2"][r2]+" von "+data.questions[qid].main;
+        console.log(data.questions[qid].table[r1][r2])
+        pov.innerHTML = points+" Punkt(e)"
+        exv.innerHTML = "Aufgabe "+(valevel)+"/"+data.todo
+        } else if (data.questions[qid].type=="text"){
+        document.getElementById("q").innerHTML = data.questions[qid].quest;
+        console.log(data.questions[qid].correct)
+        pov.innerHTML = points+" Punkt(e)"
+        exv.innerHTML = "Aufgabe "+(valevel)+"/"+data.todo
+        } else if (data.questions[qid].type=="click"){
+        document.getElementById("q").innerHTML = data.questions[qid].quest;
+        document.getElementById("submit").style["display"] = "none";
+        $.each(data.questions[qid].answers, function(){
+        document.getElementById("buttons").innerHTML += "<button onclick='clicked(\""+this+"\")'>"+this+"</button>";
+        })
+        console.log(data.questions[qid].correct)
+        pov.innerHTML = points+" Punkt(e)"
+        exv.innerHTML = "Aufgabe "+(valevel)+"/"+data.todo
+        }
+      }
+      answer.focus()
+    </script>
+  </body>
+</html>

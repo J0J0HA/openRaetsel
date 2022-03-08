@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="https://glitch.com/favicon.ico" />
+
+    <title>Fehler | openRätsel</title>
+    
+    <!-- import the webpage's stylesheet -->
+    <link rel="stylesheet" href="/style.css" />
+
+    <!-- import the webpage's javascript file -->
+    <script src="/script.js"></script>
+  </head>
+  <body>
+    <!-- the wrapper and content divs set margins and positioning -->
+    <script>sessionCheckC()</script>
+    <div class="wrapper">
+      <div class="content" role="main">
+        <!-- this is the start of content for our page -->
+        <h1 id="titlemsg" class="title">Fehler!</h1><br>
+        <p id="more">
+          Bitte schreibe den folgenden Text sowie deine Letzten Schritte und Tätigigkeiten an <a href="mailto:huhndietlinde@gmail.com">huhndietlinde@gmail.com</a>, damit wir den Fehler beheben können.
+        </p>
+        <p id="more2">
+          ...
+        </p>
+        <p>
+          <a href="/v1">Neues Quiz starten</a>
+        </p>
+      </div>
+    </div>
+    <script>
+      function getOtherQuerys(){
+        var qs = window.location.href.split("?")[2].split("#")[0]
+        try{
+          var qe = qs.split("&")
+        }catch(e){
+          var qe=[qs]
+        }
+        var res = {}
+        for(var e in qe){
+          res[qe[e].split("=")[0]] = qe[e].split("=")[1]
+        }
+        return res
+      }  
+      try{
+        more2.innerHTML = decodeURI(window.location.href.split("#e!")[1]).replace("\n", "<br>").replace("\n", "<br>").replace("\n", "<br>").replace("\n", "<br>").replace("\n", "<br>").replace("\n", "<br>")
+      }catch(e){window.location.href = '/v1/crashed.html#:'+Date.now()+':#e!'+e.stack}
+    </script>
+  </body>
+</html>

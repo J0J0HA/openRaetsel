@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="https://cdn.glitch.com/bf81f2d6-8438-4fda-b1ed-5c95421f0aec%2Ffavicon.ico" />
+
+    <title>Anmelden | openRätsel</title>
+    
+    <!-- import the webpage's stylesheet -->
+    <link rel="stylesheet" href="/style.css" />
+
+    <!-- import the webpage's javascript file -->
+    <script src="/v3/script.js"></script>
+  </head>
+  <body>
+    <!-- the wrapper and content divs set margins and positioning -->
+    <script>sessionCheck()</script>
+    <div class="wrapper">
+      <div class="content" role="main">
+        <!-- this is the start of content for our page -->
+        <h1 id="titlemsg" class="title">Anmelden</h1><br>
+        <b>offline-Games, die in oR1 und oR2 als /pack/[name] registriert wurden,<br></b>
+        <b>sind nun unter /pack/[name].json zu finden.<br></b>
+        <form id="f" action="/v3/desktopgame.html" method="GET">
+          <input id="gt" placeholder="Game ID or Game Link" name="game"><br>
+          <input placeholder="Dein Name" name="name"><br>
+          <input id="o" style="display:none;" name="online">
+          <input id="time" style="display:none;" name="session">
+          <input name="submit" type="submit" value="Start"><br>
+        </form>
+        <script>
+          try{
+            if(window.location.href.indexOf("?")!=-1){
+              if(getQuerys()["game"]){
+                gt.value = getQuerys()["game"]
+              } else {
+                //nothing
+              }
+            } else {
+              //nothing
+            }
+            setInterval('time.value=Date.now()', 3000)
+            setInterval('if(gt.value.startsWith("/") || gt.value.startsWith("https://") || gt.value.startsWith("http://")){o.value="0"}else{o.value="1"}', 500)
+          } catch(e){window.location.href = '/v3/crashed.html#:'+Date.now()+':#e!'+e.stack}
+          </script>
+      </div>
+    </div>
+  </body>
+</html>

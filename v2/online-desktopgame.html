@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="https://cdn.glitch.com/bf81f2d6-8438-4fda-b1ed-5c95421f0aec%2Ffavicon.ico" />
+
+    <title>Spiel | openRätsel</title>
+    
+    <!-- import the webpage's stylesheet -->
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+  <body>
+    <!-- the wrapper and content divs set margins and positioning -->
+    <script>
+      var level = 0
+      var points = 0
+      var gamedata = level+":"+points
+      function getQuerys(){
+        qs = window.location.href.split("?")[1].split("#")[0]
+        try{
+          qe = qs.split("&")
+        }catch(e){
+          qe=[qs]
+        }
+        res = {}
+        for(var e in qe){
+          res[qe[e].split("=")[0]] = qe[e].split("=")[1]
+        }
+        return res
+      }
+      try{
+        if((parseInt(getQuerys()["session"])<=Date.now()-10000) || (getQuerys()["session"]==undefined)){
+          if((parseInt(window.location.href.split("#")[1])<=Date.now()-10000) || (window.location.href.split("#")[1]==undefined)){
+            console.log("Your session is over. (You internet ist too slow or you used a old link!)")
+            window.location.href="/v2/uncorrect.html#"+Date.now()
+          }
+        }
+      }catch(e){
+        console.log("We cannot check your session. (You used a wrong link or our system has failed.)")
+        window.location.href="/v2/unchecked.html#"+Date.now()
+      }
+      if(getQuerys()["submit"]){
+        window.location.href = window.location.href.replace("&submit=Start", "")
+        window.location.href = window.location.href.replace("&session=", "#")
+      }else{
+        window.location.href = window.location.href.split("#")[0]+"#"+Date.now()
+      }
+      setInterval('window.location.href=window.location.href.split("#")[0]+"#"+Date.now()', 3000)
+    </script>
+    <div class="wrapper">
+      <div class="content" role="main">
+        <!-- this is the start of content for our page -->
+        <script>window.location.href="/v2/nogame.html#"+Date.now()</script>
+      </div>
+    </div>
+  </body>
+</html>
